@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add a New Recipe</title>
+</head>
+<body>
+  <h1>Add a New Recipe</h1>
+  <form id="recipeForm">
+    <label for="name">Recipe Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required></textarea>
+<br><br>
+
+    <label for="preparationTime">Preparation Time:</label>
+    <input type="text" id="preparationTime" name="preparationTime" required><br><br>
+
+    <label for="cookingTime">Cooking Time (minutes):</label>
+    <input type="number" id="cookingTime" name="cookingTime" required><br><br>
+
+    <label for="imageUrl">Image URL:</label>
+    <input type="url" id="imageUrl" name="imageUrl" required><br><br>
+
+    <label for="country">Country:</label>
+    <input type="text" id="country" name="country" required><br><br>
+
+    <label for="veg">Vegetarian:</label>
+    <input type="checkbox" id="veg" name="veg"><br><br>
+
+    <button type="submit">Add Recipe</button>
+  </form>
+
+  <script>
+    document.getElementById('recipeForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(this);
+      const recipeData = {
+        name: formData.get('name'),
+        description: formData.get('description'),
+        preparationTime: formData.get('preparationTime'),
+        cookingTime: formData.get('cookingTime'),
+        imageUrl: formData.get('imageUrl'),
+        country: formData.get('country'),
+        veg: formData.get('veg') === 'on' ? true : false
+      };
+
+   
+      fetch('http://localhost:8090/recipe/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(recipeData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert('Recipe added successfully!');
+    
+        this.reset();
+      })
+      .catch(error => {
+        console.error('Error adding recipe:', error);
+      });
+    });
+  </script>
+</body>
+</html>
